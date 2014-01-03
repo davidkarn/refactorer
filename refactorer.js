@@ -50,7 +50,22 @@ function compare_all_lines(lines, threshold) {
 		&& lines[line].words.length > 1) {
 		comparisons[line] = comparisons[line] || [];
 		comparisons[line].push(nline); }}}
-    console.log(find_sequences(comparisons, 3)); }
+    var sequences = find_sequences(comparisons, 3); 
+    for (var i in sequences) {
+	var s = sequences[i];
+	sequences[i] = {line_numbers: Object.keys(s),
+			code: get_code(lines, s)}; }
+    return sequences; }
+
+function get_code(lines, sequence) {
+    var code = "";
+    var num_lines = 0;
+    for (var i in sequence) {
+	num_lines = Math.max(num_lines, sequence[i]); }
+    var start_line = parseInt(Object.keys(sequence)[0]);
+    for (var line = start_line; line < start_line + num_lines; line++) {
+	code += lines[line].line + "\n"; }
+    return code; }
 
 function find_sequences(lines, threshold) {
     var sequences = [];
@@ -117,8 +132,9 @@ function better_row(row1, row2) {
 
     return ((r1c >= r2c) ? row1 : row2); }
 
-function find_double_sequences(sequences) {}
-    
-
-read_file_lines(parse_line, compare_all_lines); 
+read_file_lines(parse_line, 
+		function(l) {
+		    var sequences = compare_all_lines(l); 
+		    for (var i in sequences) {
+			console.log("line numbers: " + sequences[i].line_numbers.join(", ") + ":\n\n" + sequences[i].code + "\n\n\n"); }});
 
