@@ -50,7 +50,19 @@ function compare_all_lines(lines, threshold) {
 		&& lines[line].words.length > 1) {
 		comparisons[line] = comparisons[line] || [];
 		comparisons[line].push(nline); }}}
-    console.log(comparisons); }
+    console.log(find_sequences(comparisons, 3)); }
+
+function find_sequences(lines, threshold) {
+    var sequences = [];
+    var sequence = {};
+    for (var l in lines) {
+	if (_.isEqual(sequence, {}) || sequence[(l - 1)]) {
+	    sequence[l] = lines[l]; }
+	else {
+	    if (Object.keys(sequence).length >= threshold) {
+		sequences.push(sequence); }
+	    sequence = {}; }}
+    return sequences; }
 
 read_file_lines(parse_line, compare_all_lines); 
 
