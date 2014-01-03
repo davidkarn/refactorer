@@ -1,0 +1,27 @@
+{
+  "name": "refactorer",
+  "version": "0.0.0",
+  "description": "A small utility for finding repeated blocks of code in javascript files",
+  "main": "refactorer.js",
+    "dependencies": {"readline": "*",
+		     "underscore": "*"},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/davidkarn/refactorer"
+  },
+  "keywords": [
+    "refactor",
+    "code",
+    "js",
+    "search"
+  ],
+  "author": "David Karn",
+  "license": "Public Domain",
+  "bugs": {
+    "url": "https://github.com/davidkarn/refactorer/issues"
+  },
+  "homepage": "https://github.com/davidkarn/refactorer"
+}
