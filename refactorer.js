@@ -62,23 +62,20 @@ function find_sequences(lines, threshold) {
 	    if (Object.keys(sequence).length >= threshold) {
 		sequences.push(sequence); }
 	    sequence = {}; }}
-    return sequences.map(verify_contains_sequence); }
+    return unique_sequences(sequences.map(verify_contains_sequence)); }
 
 
 function verify_contains_sequence(sequence) {
     var found_sequences = {};
     for (var i in sequence) {
 	var lines = sequence[i].concat([i]);
-	console.log({fs: found_sequences, lines: lines}); 
 	if (_.isEqual(found_sequences, {})) {
 	    for (var l in lines) {
 		found_sequences[lines[l]] = 1; }}
 	else {
 	    for (var l in lines) {
 		for (var f in found_sequences) {
-//		    console.log({fsf: found_sequences[f], fsff: (found_sequences[f] + f), ll: lines[l], f: f, l: l});
 		    if (found_sequences[f] + parseInt(f) == lines[l]) {
-			console.log('yippee!!');
 			found_sequences[f] += 1; }}}}}
     var f_s = {};
     for (var f in found_sequences) { 
@@ -86,8 +83,39 @@ function verify_contains_sequence(sequence) {
 	    f_s[f] = found_sequences[f]; }}
     return f_s; }
 
+function arrays_intersect(a1, a2) {
+    for (var i in a1) {
+	if (a2.indexOf(a1[i]) >= 0) {
+	    return a1[i]; }}
+    return false; }
+
 function unique_sequences(sequences) {
-    }
+    sequences = sequences.filter(function(x) {
+	var count = 0;
+	for (var i in x) {
+	    count++; }
+	return count > 1; });
+    var new_sequence = [];
+
+    for (var r in sequences) {
+	var row = Object.keys(sequences[r]);
+	var found = false;
+	for (var nr in new_sequence) {
+	    if (arrays_intersect(row, Object.keys(new_sequence[nr]))) {
+		found = true; 
+		new_sequence[nr] = better_row(sequences[r], new_sequence[nr]); }}
+	if (!found) {
+	    new_sequence.push(sequences[r]); }}
+    return new_sequence; }
+
+function better_row(row1, row2) {
+    var r1c = 0
+    var r2c = 0;
+    
+    for (var i in row1) { r1c += row1[i]; }
+    for (var i in row2) { r2c += row2[i]; }
+
+    return ((r1c >= r2c) ? row1 : row2); }
 
 function find_double_sequences(sequences) {}
     
