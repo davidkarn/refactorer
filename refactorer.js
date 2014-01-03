@@ -62,7 +62,35 @@ function find_sequences(lines, threshold) {
 	    if (Object.keys(sequence).length >= threshold) {
 		sequences.push(sequence); }
 	    sequence = {}; }}
-    return sequences; }
+    return sequences.map(verify_contains_sequence); }
+
+
+function verify_contains_sequence(sequence) {
+    var found_sequences = {};
+    for (var i in sequence) {
+	var lines = sequence[i].concat([i]);
+	console.log({fs: found_sequences, lines: lines}); 
+	if (_.isEqual(found_sequences, {})) {
+	    for (var l in lines) {
+		found_sequences[lines[l]] = 1; }}
+	else {
+	    for (var l in lines) {
+		for (var f in found_sequences) {
+//		    console.log({fsf: found_sequences[f], fsff: (found_sequences[f] + f), ll: lines[l], f: f, l: l});
+		    if (found_sequences[f] + parseInt(f) == lines[l]) {
+			console.log('yippee!!');
+			found_sequences[f] += 1; }}}}}
+    var f_s = {};
+    for (var f in found_sequences) { 
+	if (found_sequences[f] > 2) {
+	    f_s[f] = found_sequences[f]; }}
+    return f_s; }
+
+function unique_sequences(sequences) {
+    }
+
+function find_double_sequences(sequences) {}
+    
 
 read_file_lines(parse_line, compare_all_lines); 
 
